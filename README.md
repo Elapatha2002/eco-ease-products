@@ -5,7 +5,7 @@ A separate, submit-only web app for Eco Ease product details and photos. It uses
 ## Run locally
 
 1. `npm install`
-2. Copy `.env.example` to `.env` and fill in the five public Appwrite identifiers. Never put an API key in a `VITE_` variable.
+2. Copy `.env.example` to `.env` and fill in the five public Appwrite identifiers (the values are also in `.env.production`). Never put an API key in a `VITE_` variable.
 3. Follow [APPWRITE_SETUP.md](APPWRITE_SETUP.md) to create the project resources and submitter account.
 4. `npm run dev`
 
@@ -35,4 +35,4 @@ Any future import should read only reviewed rows, map by SKU, copy the **actual 
 
 ## GitHub
 
-Commit the source files, `.env.example`, and this documentation. Do not commit `.env`, keys, customer passwords, or `node_modules`. The included GitHub Actions workflow checks tests and the production build on every push or pull request. Appwrite Sites can then build and publish the repository.
+Commit the source files, public browser configuration, and this documentation. Do not commit `.env`, API keys, customer passwords, or `node_modules`. The included GitHub Actions workflow checks tests and the production build on every push or pull request. Appwrite Sites can then build and publish the repository.
