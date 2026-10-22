@@ -11,6 +11,13 @@ export const auth = {
   current: () => account.get(),
   login: (email, password) => account.createEmailPasswordSession({ email, password }),
   logout: () => account.deleteSession({ sessionId: 'current' }),
+  requestPasswordReset: (email) => account.createRecovery({
+    email,
+    url: `${window.location.origin}${window.location.pathname}`,
+  }),
+  completePasswordReset: (userId, secret, password) => account.updateRecovery({
+    userId, secret, password,
+  }),
 };
 
 export async function submitProduct(data, images, user, onProgress, submission) {
