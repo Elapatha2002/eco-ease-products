@@ -2,7 +2,7 @@
 
 This setup belongs to the **Eco Ease Product Intake** Appwrite Cloud project in Singapore, separate from the ecommerce system. The five IDs/endpoint in `.env.production` are public browser configuration, not secrets.
 
-**Created:** project `6ad8906d003972b6ef63`; TablesDB database `6ad890c50025549074d1`; table `6ad890f7001027a067e6`; image bucket `6ad895ce001da28bbe9c`; submitter team `6ad895350023d69c7e79`. The team currently needs the customer's email address before an account can be invited.
+**Created:** project `6ad8906d003972b6ef63`; TablesDB database `6ad890c50025549074d1`; table `6ad890f7001027a067e6`; image bucket `6ad895ce001da28bbe9c`; submitter team `6ad895350023d69c7e79`; customer Auth user; Site `6ad98b970026e1c01f91` at https://eco-ease-product-intake.appwrite.network/. The customer account has no password yet and can set one through the portal's password link. The customer is an active team member.
 
 ## 1. Create project and access
 
@@ -61,11 +61,12 @@ Sign in as a team member. Submit one test product with two photos, then confirm 
 
 For a real catalogue, periodically export records and original photos. Appwrite is the collection store; publication and ecommerce data remain under the main system's control.
 
-## 6. Deploy from GitHub
+## 6. Site deployment and updates
 
-1. Put this source in a GitHub repository, excluding `.env` and `node_modules`.
-2. In the same Appwrite project, create a **Site** connected to that GitHub repository. Select the Vite preset if offered. Set the build command to `npm run build` and the output directory to `dist`.
-3. The five public `VITE_APPWRITE_*` values are already in `.env.production`. Do not add an API key. Deploy the selected branch.
-4. Copy the Site's hostname and add it as a **Web platform** under the Appwrite project settings. Test sign-in and one submission on the actual deployed URL.
+The initial Site is already deployed manually from the source archive, using the Vite preset, `npm install`, `npm run build`, and `./dist`. The five public `VITE_APPWRITE_*` values are in `.env.production`; the hostname is registered as a Web platform. No API key is present in the frontend.
+
+1. For a manual update, create a `.tar.gz` archive from the repository root, excluding `.env`, `node_modules`, `dist`, and `.git`. Upload it as a new deployment in the Appwrite Site dashboard. Do not put credentials in the archive.
+2. GitHub source is at `Elapatha2002/eco-ease-products`, but **pushes do not update the manually deployed Site**. To enable automatic deployments, connect Appwrite's GitHub integration with access limited to that repository and select the `main` branch. This external app authorization needs the account owner's explicit approval.
+3. Have the customer use **Set or reset your password** at https://eco-ease-product-intake.appwrite.network/, follow the email link, and sign in. Test a product submission with two images and verify the row and file IDs in the Console. This end-to-end test is pending until the customer sets the password.
 
 The Site and data resources should be in the same Appwrite project, but this project remains separate from the main ecommerce system.
