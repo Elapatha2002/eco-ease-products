@@ -2,6 +2,8 @@
 
 A separate, submit-only web app for Eco Ease product details and photos. It uses Appwrite Cloud for login, a staging table, and private image storage. It does **not** write to the ecommerce database, publish products, or provide editing/deleting screens. Developers review and manage submissions in the Appwrite Console.
 
+**Live portal:** https://eco-ease-product-intake.appwrite.network/ — the customer account is in the create-only Product submitters team. The customer must use **Set or reset your password** on the portal to receive a password setup link, then sign in. No password was created by the development team.
+
 ## Run locally
 
 1. `npm install`
@@ -9,7 +11,7 @@ A separate, submit-only web app for Eco Ease product details and photos. It uses
 3. Follow [APPWRITE_SETUP.md](APPWRITE_SETUP.md) to create the project resources and submitter account.
 4. `npm run dev`
 
-Run `npm test` and `npm run build` before deployment. The output is a static `dist/` directory. Appwrite Sites can deploy it from GitHub; the [setup guide](APPWRITE_SETUP.md) covers the connection. Configure the actual website hostname as a Web platform in the Appwrite project.
+Run `npm test` and `npm run build` before deployment. The output is a static `dist/` directory. The initial Appwrite Site was deployed by uploading a source `.tar.gz` archive, with the Vite preset, `npm install`, `npm run build`, and `./dist` output. The deployed hostname is registered as an Appwrite Web platform. See the [setup guide](APPWRITE_SETUP.md) for updates.
 
 ## Data contract
 
@@ -35,4 +37,4 @@ Any future import should read only reviewed rows, map by SKU, copy the **actual 
 
 ## GitHub
 
-Commit the source files, public browser configuration, and this documentation. Do not commit `.env`, API keys, customer passwords, or `node_modules`. The included GitHub Actions workflow checks tests and the production build on every push or pull request. Appwrite Sites can then build and publish the repository.
+The source is in [`Elapatha2002/eco-ease-products`](https://github.com/Elapatha2002/eco-ease-products). Do not commit `.env`, API keys, customer passwords, or `node_modules`. The included GitHub Actions workflow checks tests and the production build on every push or pull request. **The live Site is a manual deployment; GitHub pushes do not update it.** Connect Appwrite's GitHub integration with repository-scoped access to enable automatic deployments later, or upload a fresh source archive after each code change.
