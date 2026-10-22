@@ -63,8 +63,10 @@ function renderLogin(error = '') {
       ${error ? `<p class="alert" role="alert">${safe(error)}</p>` : ''}
       <button class="primary full" type="submit">Sign in <span aria-hidden="true">→</span></button>
     </form>
+    <p class="login-foot"><button id="forgot-password" class="text-button" type="button">Set or reset your password</button></p>
     <p class="login-foot">Need access? Contact the Eco Ease development team.</p>
   </section>`, true);
+  document.querySelector('#forgot-password').addEventListener('click', () => renderResetRequest());
   document.querySelector('#login-form').addEventListener('submit', async event => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -77,6 +79,63 @@ function renderLogin(error = '') {
       renderForm();
     } catch (e) {
       renderLogin(e?.code === 401 ? 'Incorrect email or password.' : 'Sign-in failed. Please try again.');
+    }
+  });
+}
+
+function renderResetRequest(message = '', error = false) {
+  shell(`<section class="card login-card">
+    <div class="eyebrow">ACCOUNT ACCESS</div><h1>Set your password</h1>
+    <p>Enter the email address the Eco Ease team added to the portal. We will send a link to set your password.</p>
+    <form id="reset-request-form">
+      <label for="reset-email">Email address</label>
+      <input id="reset-email" type="email" autocomplete="email" required placeholder="you@example.com" />
+      ${message ? `<p class="${error ? 'alert' : 'progress'}" role="status">${safe(message)}</p>` : ''}
+      <button class="primary full" type="submit">Send password link</button>
+    </form>
+    <p class="login-foot"><button id="back-login" class="text-button" type="button">Back to sign in</button></p>
+  </section>`, true);
+  document.querySelector('#back-login').addEventListener('click', () => renderLogin());
+  document.querySelector('#reset-request-form').addEventListener('submit', async event => {
+    event.preventDefault();
+    const email = document.querySelector('#reset-email').value.trim();
+    const button = event.currentTarget.querySelector('button');
+    button.disabled = true;
+    try {
+      await auth.requestPasswordReset(email);
+      renderResetRequest('If this address has an account, check its inbox for the password link.');
+    } catch {
+      renderResetRequest('Could not send the link. Please check your address and try again.', true);
+    }
+  });
+}
+
+function renderResetComplete(userId, secret, message = '') {
+  shell(`<section class="card login-card">
+    <div class="eyebrow">ACCOUNT ACCESS</div><h1>Choose a password</h1>
+    <form id="reset-complete-form">
+      <label for="new-password">New password</label>
+      <input id="new-password" type="password" autocomplete="new-password" minlength="8" required />
+      <label for="confirm-password">Confirm password</label>
+      <input id="confirm-password" type="password" autocomplete="new-password" minlength="8" required />
+      ${message ? `<p class="alert" role="alert">${safe(message)}</p>` : ''}
+      <button class="primary full" type="submit">Save password</button>
+    </form>
+  </section>`, true);
+  document.querySelector('#reset-complete-form').addEventListener('submit', async event => {
+    event.preventDefault();
+    const password = document.querySelector('#new-password').value;
+    if (password !== document.querySelector('#confirm-password').value) {
+      renderResetComplete(userId, secret, 'The passwords do not match.');
+      return;
+    }
+    event.currentTarget.querySelector('button').disabled = true;
+    try {
+      await auth.completePasswordReset(userId, secret, password);
+      window.history.replaceState(null, '', window.location.pathname);
+      renderLogin('Password saved. Sign in with your new password.');
+    } catch {
+      renderResetComplete(userId, secret, 'This link may have expired. Request a new password link from the sign-in page.');
     }
   });
 }
@@ -311,7 +370,10 @@ if (!isConfigured) {
   renderSetup();
 } else {
   shell('<section class="card notice"><p>Loading your workspace…</p></section>', true);
-  auth.current().then(user => {
+  const recovery = new URLSearchParams(window.location.search);
+  if (recovery.has('userId') && recovery.has('secret')) {
+    renderResetComplete(recovery.get('userId'), recovery.get('secret'));
+  } else auth.current().then(user => {
     state.user = user;
     renderForm();
   }).catch(() => renderLogin());
