@@ -28,7 +28,6 @@ function shell(content, compact = false) {
   app.innerHTML = `
     <header class="topbar">
       <a class="brand" href="#" aria-label="Eco Ease product intake home">
-        <span class="brand-mark" aria-hidden="true">✳</span>
         <span>eco<span class="brand-light">ease</span><small>PRODUCT INTAKE</small></span>
       </a>
       ${state.user ? `<div class="account"><span class="account-name">${safe(state.user.email)}</span><button id="logout" class="text-button" type="button">Sign out</button></div>` : ''}
@@ -238,11 +237,11 @@ function renderImageList() {
 
 function renderForm() {
   const p = state.product;
+  // The intro clarifies that the form is for submissions only.
   shell(`<div class="intro">
-    <div class="eyebrow">PRODUCT COLLECTION / 01</div>
+    <div class="eyebrow">PRODUCT COLLECTION</div>
     <h1>Tell us about your product<span class="period">.</span></h1>
     <p>One product at a time. Add the details you want customers to see, then attach clear photos. Your submission goes to the Eco Ease development team for review.</p>
-    <div class="intro-line"><span class="dot"></span> Only submissions — changes and publishing are handled by the team.</div>
   </div>
   <form id="product-form" class="form-stack" novalidate>
     <section class="card form-section"><div class="section-number">01 / PRODUCT DETAILS</div>
@@ -276,7 +275,7 @@ function renderForm() {
       <div class="photo-meta"><span id="photo-count"></span>${state.errors.images ? `<span class="field-error" role="alert">${safe(state.errors.images)}</span>` : ''}</div>
       <div id="image-list" class="image-list"></div>
     </section>
-    <section class="submit-bar"><div><strong>Ready to send?</strong><span>The team will review your product before it appears on the website.</span></div>
+    <section class="submit-bar">
       <button id="submit-button" class="primary" type="submit" ${state.busy ? 'disabled' : ''}>${state.busy ? 'Submitting…' : 'Submit product'} <span aria-hidden="true">→</span></button>
     </section>
     <p id="form-message" class="${state.message ? 'alert' : 'sr-only'}" aria-live="polite">${safe(state.message)}</p>
