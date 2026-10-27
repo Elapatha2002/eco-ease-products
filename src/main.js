@@ -62,8 +62,6 @@ function renderLogin(error = '') {
       ${error ? `<p class="alert" role="alert">${safe(error)}</p>` : ''}
       <button class="primary full" type="submit">Sign in <span aria-hidden="true">→</span></button>
     </form>
-    <p class="login-foot"><button id="forgot-password" class="text-button" type="button">Set or reset your password</button></p>
-    <p class="login-foot">Need access? Contact the Eco Ease development team.</p>
   </section>`, true);
   document.querySelector('#forgot-password').addEventListener('click', () => renderResetRequest());
   document.querySelector('#login-form').addEventListener('submit', async event => {
